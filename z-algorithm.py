@@ -53,6 +53,3 @@ def create_long_string(pattern, array):
     for i in range(len(array)):
         s[len(pattern) + 1 + i] = array[i]  # pattern plus separator; e.g. CAT$
     return s
-
-
-print(z_algorithm('cat', 'tacocat'))
