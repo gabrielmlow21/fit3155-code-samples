@@ -1,6 +1,6 @@
 # uses a table to improve performance while searching for the pattern into an array
-def z_algorithm():
-    return
+def z_algorithm(pattern, array):
+    return search(pattern, array)
 
 def search(pattern, array):
     z = create_z_table(pattern, array)
@@ -10,7 +10,7 @@ def search(pattern, array):
     return -1
 
 def search_all(pattern, array):
-    result = [None] * len(array)
+    result = [0] * len(array)
     z = create_z_table(pattern, array)
     for i in range(1, len(z)):
         if z[i] == len(pattern):
@@ -19,7 +19,7 @@ def search_all(pattern, array):
 
 # create a z-table
 def create_z_table(pattern, array):
-    z = [None * len(pattern) + len(array) + 1]
+    z = [0] * (len(pattern) + len(array) + 1)
     long_string = create_long_string(pattern, array)
     right = 0
     left = 0
@@ -27,7 +27,7 @@ def create_z_table(pattern, array):
         if i > right:
             right = i
             left = i
-            while right < len(long_string) and right < long_string[right - left] == long_string[right]:
+            while right < len(long_string) and long_string[right - left] == long_string[right]:
                 right = right + 1
             z[i] = right - left
             right = right - 1
@@ -46,10 +46,13 @@ def create_z_table(pattern, array):
 # construct long string
 # e.g. CAT$TACOCAT
 def create_long_string(pattern, array):
-    s = [None] * (len(pattern) + len(array) + 1)
+    s = [0] * (len(pattern) + len(array) + 1)
     for i in range(len(pattern)):
         s[i] = pattern[i]
     s[len(pattern)] = '$'
     for i in range(len(array)):
         s[len(pattern) + 1 + i] = array[i]  # pattern plus separator; e.g. CAT$
     return s
+
+
+print(z_algorithm('cat', 'tacocat'))
