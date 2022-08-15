@@ -2,6 +2,7 @@
 def z_algorithm(pattern, array):
     return search(pattern, array)
 
+# returns -1 if substring is not found
 def search(pattern, array):
     z = create_z_table(pattern, array)
     for i in range(1, len(z)):
@@ -53,3 +54,6 @@ def create_long_string(pattern, array):
     for i in range(len(array)):
         s[len(pattern) + 1 + i] = array[i]  # pattern plus separator; e.g. CAT$
     return s
+
+
+print(z_algorithm('taco', 'tacca'))
