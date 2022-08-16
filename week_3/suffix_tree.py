@@ -76,6 +76,15 @@ class SuffixTree:
                     self.active_point.active_edge += 1
                     self.active_point.active_length -= 1
                 self.remaining -= 1
+    
+    def walk_down(self, index):
+        edge = self.select_edge()
+        if (self.edge_size(edge) < self.active_point.active_length):
+            self.active_point.active_node = edge
+            self.active_point.active_length -= self.edge_size(edge)
+            self.active_point.active_edge = edge.children[self.input[index].start]
+        else:
+            self.active_point.active_length += 1
 
     def get_next_character(self, i):
         edge = self.select_edge()
