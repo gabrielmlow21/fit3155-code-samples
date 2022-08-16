@@ -59,6 +59,16 @@ class SuffixTree:
 
     def edge_size(self, edge):
         return edge.end.end - edge.start
+    
+    def set_index(self, root, val, size):
+        if root == None: return
+        val = val + root.end.end - root.start + 1
+        if root.index != -1:
+            root.index = size - val
+            return
+        for node in root.children:
+            self.set_index(node, val, size)
+        
 
 
 
