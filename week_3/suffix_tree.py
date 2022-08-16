@@ -43,7 +43,17 @@ class SuffixTree:
     
     def get_next_character(self, i):
         edge = self.select_edge()
-    
+        if self.edge_size(edge) >= self.active_point.active_length:
+            return input[edge.start + self.active_point.active_length]
+        elif (self.edge_size(edge) + 1) == self.active_point.active_length:
+            if edge.children[self.input[i] != None]:
+                return self.input[i]
+        else:
+            self.active_point.active_point = edge
+            self.active_point.active_edge = self.active_point.active_edge + self.edge_size(edge) + 1
+            return self.get_next_character(i)
+        return 0
+
     def select_edge(self):
         return self.active_point.active_node.children[self.input[self.active_point.active_edge]]
 
