@@ -1,3 +1,6 @@
+from logging import root
+
+
 class SuffixTree:
     terminal = '$'
     root = None
@@ -40,7 +43,40 @@ class SuffixTree:
                     self.remaining -= 1
             else:
                 c = self.get_next_character(i)
-    
+                if c != 0:
+                    if c == self.input:
+                        edge = self.select_edge()
+                        if last_internal_node != None:
+                            last_internal_node.suffix_link = edge
+                        self.walk_down(i)
+                        break
+                    else:
+                        edge = self.select_edge()
+                        current_start = edge.start
+                        edge.start += self.active_point.active_length
+                        internal_node = SuffixNode(current_start, End(current_start + self.active_point.active_length - 1))
+                        leaf_node = SuffixNode(i, self.end)
+                        internal_node.children[input[edge.start]] = edge
+                        internal_node.children[input[leaf_node.start]] = leaf_node
+                        internal_node.index = -1
+                        self.active_point.active_node.children[input[internal_node.start]] = internal_node        
+                        if last_internal_node != None:
+                            last_internal_node.suffix_link = internal_node
+                        last_internal_node = internal_node
+                        internal_node.suffix_link = self.root
+                else:
+                    edge = self.select_edge()
+                    edge.children[input[i]] = SuffixNode(i, self.end)
+                    if last_internal_node != None:
+                        last_internal_node.suffix_link = edge
+                    last_internal_node.suffix_link = edge 
+                if self.active_point.active_node != self.root:
+                    self.active_point.active_node = self.active_point.active_node.suffix_link
+                else:
+                    self.active_point.active_edge += 1
+                    self.active_point.active_length -= 1
+                self.remaining -= 1
+
     def get_next_character(self, i):
         edge = self.select_edge()
         if self.edge_size(edge) >= self.active_point.active_length:
