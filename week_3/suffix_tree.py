@@ -47,6 +47,9 @@ class SuffixTree:
     def select_edge(self):
         return self.active_point.active_node.children[self.input[self.active_point.active_edge]]
 
+    def edge_size(self, edge):
+        return edge.end.end - edge.start
+
 
 
 class SuffixNode:
