@@ -4,10 +4,12 @@ def boyer_moore():
 # checks if i and j matches until the end of the string
 # j cannot be from the beginning
 def is_prefix(pattern, index):
-    j = 1
-    for i in range(index+1, len(pattern)):
+    i = index
+    j = 0
+    while i < len(pattern):
         if pattern[i] != pattern[j]:
             return False
+        i = i + 1
         j = j + 1
     return True
 
@@ -20,6 +22,3 @@ def suffix_length(pattern, index):
         i = i - 1
         j = j - 1
     return match_length
-
-
-print(suffix_length('baidai', 2))
