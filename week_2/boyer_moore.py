@@ -1,3 +1,5 @@
+import string
+
 def boyer_moore():
     return
 
@@ -49,6 +51,33 @@ def suffix_length(pattern, index):
         j = j - 1
     return match_length
 
+def search(array, pattern):
+    # if pattern == None or len(pattern) == 0:
+    #     return 0
+    # if array == None:
+    #     return -1
+    bad_character_table = precompute_bad_character_table(pattern)
+    suffix_table = preprocess_suffix_table(pattern)    
+    i = len(pattern) - 1
+    j = len(pattern) - 1
+    while i < len(array):
+        while pattern[j] == pattern[i]:
+            if j == 0:
+                return i    # we found the match
+            i = i - 1
+            j = j - 1
+        i = i + max(suffix_table[len(pattern)-1-j], bad_character_table(array[i]))
+    return -1
+
+def precompute_bad_character_table(pattern):
+    table = [None] * len(string.ascii_lowercase)
+    for i in range(len(string.ascii_lowercase)):
+        table[i] = len(pattern)
+    for t in range(len(string.ascii_lowercase)-1):
+        table[pattern[t]] = max(1, len(pattern)-t-1)
+    if table[pattern[len(pattern)-1]] < len(pattern):
+        table[pattern[len(pattern)-1]] = 1
+    return table
 
 print(suffix_length('baidai', 0))
 print(suffix_length('baidai', 1))
