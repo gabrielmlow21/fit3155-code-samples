@@ -1,7 +1,22 @@
 import string
 
-def boyer_moore():
-    return
+def boyer_moore(array, pattern):
+    # if pattern == None or len(pattern) == 0:
+    #     return 0
+    # if array == None:
+    #     return -1
+    bad_character_table = precompute_bad_character_table(pattern)
+    suffix_table = preprocess_suffix_table(pattern)    
+    i = len(pattern) - 1
+    j = len(pattern) - 1
+    while i < len(array):
+        while pattern[j] == pattern[i]:
+            if j == 0:
+                return i    # we found the match
+            i = i - 1
+            j = j - 1
+        i = i + max(suffix_table[len(pattern)-1-j], bad_character_table(array[i]))
+    return -1
 
 # print(preprocess_suffix_table('baidai')) = [6, 7, 8, 9, 10, 11]
 def preprocess_suffix_table(pattern):
@@ -51,38 +66,24 @@ def suffix_length(pattern, index):
         j = j - 1
     return match_length
 
-def search(array, pattern):
-    # if pattern == None or len(pattern) == 0:
-    #     return 0
-    # if array == None:
-    #     return -1
-    bad_character_table = precompute_bad_character_table(pattern)
-    suffix_table = preprocess_suffix_table(pattern)    
-    i = len(pattern) - 1
-    j = len(pattern) - 1
-    while i < len(array):
-        while pattern[j] == pattern[i]:
-            if j == 0:
-                return i    # we found the match
-            i = i - 1
-            j = j - 1
-        i = i + max(suffix_table[len(pattern)-1-j], bad_character_table(array[i]))
-    return -1
-
+# adds len(pattern) to every character that is not in the pattern
+# adds len(pattern) to the last character of the pattern in case it is unique
 def precompute_bad_character_table(pattern):
     table = [None] * len(string.ascii_lowercase)
     for i in range(len(string.ascii_lowercase)):
         table[i] = len(pattern)
-    for t in range(len(string.ascii_lowercase)-1):
+    for t in range(len(pattern)-1):
         table[pattern[t]] = max(1, len(pattern)-t-1)
-    if table[pattern[len(pattern)-1]] < len(pattern):
+    # if the last character of the pattern is smaller
+    # e.g. test (from test) - 121
+    if table[pattern[len(pattern)-1]] < len(pattern):   
         table[pattern[len(pattern)-1]] = 1
     return table
 
-print(suffix_length('baidai', 0))
-print(suffix_length('baidai', 1))
-print(suffix_length('baidai', 2))
-print(suffix_length('baidai', 3))
-print(suffix_length('baidai', 4))
+# print(suffix_length('baidai', 0))
+# print(suffix_length('baidai', 1))
+# print(suffix_length('baidai', 2))
+# print(suffix_length('baidai', 3))
+# print(suffix_length('baidai', 4))
 
-print(preprocess_suffix_table('baidai'))
+print(boyer_moore('baidai', 'ai'))
